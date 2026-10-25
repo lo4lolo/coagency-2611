@@ -1,0 +1,6 @@
+.firebase/
+.claude/
+*.docx
+*.xlsx
+*.hwp
+*.hwpx

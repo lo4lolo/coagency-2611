@@ -1,0 +1,32 @@
+rules_version = '2';
+// Firestore 보안 규칙. 배포: 이 폴더에서  firebase.cmd deploy --only firestore:rules
+// - 정해진 문서·필드 모양만 쓸 수 있습니다.
+// - 분임 자리(members)는 운영 콘솔의 정원(config.cap)을 넘겨 늘릴 수 없습니다(줄이는 것은 언제나 가능).
+// - 2026. 12. 31. 이후에는 쓰기가 자동으로 막힙니다(읽기는 계속 가능). 결과를 받은 뒤 read 도 닫으세요.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function open() { return request.time < timestamp.date(2026, 12, 31); }
+
+    match /events/{eid} {
+      allow read: if true;
+      allow create, update: if open() && request.resource.data.keys().hasOnly(['config', 'state']);
+
+      match /groups/{g} {
+        function cap() {
+          let p = /databases/$(database)/documents/events/$(eid);
+          return exists(p) && get(p).data.get('config', {}).get('cap', 0) is int
+            ? get(p).data.config.cap : 6;
+        }
+        function newN() { return request.resource.data.get('members', {}).size(); }
+        function oldN() { return resource == null ? 0 : resource.data.get('members', {}).size(); }
+
+        allow read: if true;
+        allow create, update: if open()
+          && g.matches('^[1-9]$')
+          && request.resource.data.keys().hasOnly(['members', 'notes', 'likes', 'sentence'])
+          && (!('sentence' in request.resource.data) || request.resource.data.sentence.size() <= 200)
+          && (newN() <= oldN() || newN() <= cap());
+      }
+    }
+  }
+}
