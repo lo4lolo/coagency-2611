@@ -83,7 +83,7 @@ export function pinGate(root, kind, pin, title, onOk) {
   $('form', root).onsubmit = e => {
     e.preventDefault();
     if ($('#pin', root).value.trim() === pin) { lsSet('ca_pin_' + kind, '1'); onOk(); }
-    else toast('PIN이 맞지 않습니다');
+    else toast('PIN이 맞지 않아요');
   };
 }
 
@@ -94,20 +94,20 @@ export function pinGate(root, kind, pin, title, onOk) {
  */
 export function card(n, { like = true, mine = false, tools = false, group = false, fresh = false } = {}) {
   const l = laneOf(n.l);
-  const meta = [group ? `<b>${n.g}분임</b>` : '', group ? `<span class="tag ${l.cls}">${l.icon} ${l.short}</span>` : '',
-    mine ? '<span class="mine-tag">내 의견</span>' : '', n.a === 'facil' ? '<span class="muted">진행자 입력</span>' : '',
+  const meta = [group ? `<b>${n.g}분임</b>` : '', group ? `<span class="tag ${l.cls}">${l.short}</span>` : '',
+    mine ? '<span class="mine-tag">내 카드</span>' : '', n.a === 'facil' ? '<span class="muted">진행자 입력</span>' : '',
     n.star ? '<span class="star-mark">★ 핵심</span>' : '', n.ed ? '<span class="muted">수정됨</span>' : ''].filter(Boolean).join('');
   return `<article class="cn ${l.cls} ${n.star ? 'star' : ''} ${mine ? 'mine' : ''} ${fresh ? 'fresh' : ''}" data-id="${n.id}" data-g="${n.g ?? ''}" ${tools ? 'draggable="true"' : ''}>
     ${meta ? `<div class="cn-meta">${meta}</div>` : ''}
     <p>${esc(n.t)}</p>
     <div class="cn-foot">
       ${like ? `<button class="like ${n.liked ? 'on' : ''}" data-like="${n.id}" data-g="${n.g ?? ''}" aria-pressed="${!!n.liked}" aria-label="공감">♥ <b>${n.likeN}</b></button>` : `<span class="like-n">♥ ${n.likeN}</span>`}
-      ${mine ? `<span class="own"><button data-edit="${n.id}">✏️ 수정</button><button data-del="${n.id}">🗑 삭제</button></span>` : ''}
+      ${mine ? `<span class="own"><button data-edit="${n.id}">수정</button><button data-del="${n.id}">삭제</button></span>` : ''}
       ${tools ? `<span class="cn-tools">
-        <button data-star="${n.id}" title="${n.star ? '핵심 해제' : '핵심 의견으로'}">${n.star ? '★' : '☆'}</button>
-        <select data-move="${n.id}" title="다른 칸으로 옮기기" aria-label="칸 옮기기">${LANES.map(x => `<option value="${x.key}" ${x.key === l.key ? 'selected' : ''}>${x.icon} ${x.short}</option>`).join('')}</select>
-        ${n.a === 'facil' ? `<button data-fedit="${n.id}" title="수정(진행자 입력 카드만)">✏️</button>` : ''}
-        <button data-hide="${n.id}" title="삭제(되돌리기 가능)">🗑</button></span>` : ''}
+        <button data-star="${n.id}" title="${n.star ? '핵심 해제' : '핵심 카드로'}">${n.star ? '★' : '☆'}</button>
+        <select data-move="${n.id}" title="다른 칸으로 옮기기" aria-label="칸 옮기기">${LANES.map(x => `<option value="${x.key}" ${x.key === l.key ? 'selected' : ''}>${x.short}</option>`).join('')}</select>
+        ${n.a === 'facil' ? `<button data-fedit="${n.id}" title="진행자 입력 카드만 고칠 수 있어요">수정</button>` : ''}
+        <button data-hide="${n.id}" title="삭제해도 되돌릴 수 있어요">삭제</button></span>` : ''}
     </div></article>`;
 }
 

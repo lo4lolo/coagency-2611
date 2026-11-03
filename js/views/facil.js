@@ -27,25 +27,25 @@ export default function facil(root, arg, d) {
         <span class="pill" id="fmem"></span>
         <div class="fb-tools">
           <button class="ib" data-a="qr" title="주제 고르기 QR">QR</button>
-          <button class="ib" data-a="sound" id="fsound" title="시간이 끝나면 알림음">${sound ? '🔔' : '🔕'}</button>
-          <button class="ib" data-a="full" title="전체 화면">⛶</button></div>
+          <button class="ib" data-a="sound" id="fsound" title="시간이 끝나면 알림음">${sound ? '알림음 켬' : '알림음 끔'}</button>
+          <button class="ib" data-a="full" >전체 화면</button></div>
       </header>
       <div class="fb-main">
         <aside class="fb-side">
           <div class="fb-q"><small>분임 질문</small><p>${esc(T.q)}</p>
-            <ul>${T.sub.map(s => `<li>${esc(s)}</li>`).join('')}</ul><p class="small muted">연결: ${esc(T.link)}</p></div>
+            <ul>${T.sub.map(s => `<li>${esc(s)}</li>`).join('')}</ul><p class="small muted">관련 개념: ${esc(T.link)}</p></div>
           <div class="fb-tips" id="ftips"></div>
         </aside>
         <section class="fb-board">
           <div class="lanes" id="flanes"></div>
           <div id="fhid"></div>
-          <form class="sent-box" id="fsent"><label for="fsentIn"><b>분임 한 문장</b> <span class="small muted">입력하면 큰 화면과 참여자 화면에 바로 나옵니다</span></label>
+          <form class="sent-box" id="fsent"><label for="fsentIn"><b>분임 한 문장</b> <span class="small muted">적고 ‘저장’을 누르면 큰 화면과 참여자 화면에 나와요</span></label>
             <div class="sent-row"><span class="stem">${esc(SENTENCE_STEM)}</span><input id="fsentIn" maxlength="120" placeholder="____ (빈칸을 채워 주세요)"><button class="btn primary">저장</button></div>
             <p class="small muted" id="fsentSaved"></p></form>
         </section>
       </div>
-      <div class="qr-ov" id="fqr" hidden><div>${qrSvg(link('/join'))}<h2>휴대전화로 주제를 고르세요</h2><p>카메라로 찍으면 주제 고르기 화면이 열립니다 · 아무 곳이나 누르면 닫힘</p></div></div>
-      <dialog id="fedit"><form method="dialog" class="dlg"><h3>진행자 입력 카드 고치기</h3><p class="small muted">참여자가 올린 카드는 원문을 지키기 위해 고칠 수 없습니다.</p>
+      <div class="qr-ov" id="fqr" hidden><div>${qrSvg(link('/join'))}<h2>휴대전화로 주제를 고르세요</h2><p>카메라로 찍으면 주제 고르기 화면이 열려요. 화면을 누르면 닫혀요.</p></div></div>
+      <dialog id="fedit"><form method="dialog" class="dlg"><h3>진행자 입력 카드 고치기</h3><p class="small muted">참여자가 올린 카드는 원문을 남기려고 고칠 수 없게 했어요.</p>
         <textarea id="feditT" rows="3" maxlength="200"></textarea><div class="row end"><button class="btn ghost" value="cancel">닫기</button><button class="btn primary" type="button" data-a="editSave">고치기</button></div></form></dialog>
     </div>`;
 
@@ -78,15 +78,15 @@ export default function facil(root, arg, d) {
       $('#flanes', root).innerHTML = LANES.map(l => {
         const items = list.filter(n => laneOf(n.l).key === l.key).sort(sort);
         return `<div class="lane ${l.cls}" data-drop="${l.key}">
-          <div class="lane-h"><b>${l.icon} ${esc(l.name)}</b><span class="cnt">${items.length}</span></div>
+          <div class="lane-h"><b>${esc(l.name)}</b><span class="cnt">${items.length}</span></div>
           <div class="lane-body">${items.map(n => card(n, { like: false, tools: true, fresh: isNew.has(n.id) && n.a !== 'facil' })).join('') || `<p class="lane-empty">${esc(l.hint)}</p>`}</div>
-          ${adding === l.key ? `<form class="lane-add-f" data-addf="${l.key}"><textarea id="fadd" rows="2" maxlength="200" placeholder="들은 의견을 적고 Enter">${esc(draft)}</textarea>
+          ${adding === l.key ? `<form class="lane-add-f" data-addf="${l.key}"><textarea id="fadd" rows="2" maxlength="200" placeholder="들은 말을 적고 Enter를 누르세요">${esc(draft)}</textarea>
             <div class="row end"><button type="button" class="link" data-a="addCancel">취소</button><button class="btn primary small">붙이기</button></div></form>`
-            : `<button class="lane-add" data-add="${l.key}">+ 의견 추가</button>`}
+            : `<button class="lane-add" data-add="${l.key}">+ 카드 추가</button>`}
         </div>`;
       }).join('');
       const hidden = all.filter(n => n.hid);
-      $('#fhid', root).innerHTML = hidden.length ? `<div class="hid-bar"><button class="link" data-a="showHidden">🗑 삭제한 카드 ${hidden.length}개 ${showHidden ? '접기' : '보기'}</button>
+      $('#fhid', root).innerHTML = hidden.length ? `<div class="hid-bar"><button class="link" data-a="showHidden">삭제한 카드 ${hidden.length}개 ${showHidden ? '접기' : '보기'}</button>
         ${showHidden ? `<div class="hid-list">${hidden.map(n => `<span class="hid-item">${esc(n.t)} <button class="link" data-restore="${n.id}">되살리기</button></span>`).join('')}</div>` : ''}</div>` : '';
       if (adding) { const ta = $('#fadd', root); if (ta) { ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); } }
     }
@@ -118,7 +118,7 @@ export default function facil(root, arg, d) {
       const ds = b.dataset, a = ds.a;
       if (a === 'qr') { $('#fqr', root).hidden = false; return; }
       if (a === 'full') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); return; }
-      if (a === 'sound') { sound = !sound; lsSet('ca_sound', sound ? '1' : '0'); $('#fsound', root).textContent = sound ? '🔔' : '🔕'; if (sound) beep(1); return; }
+      if (a === 'sound') { sound = !sound; lsSet('ca_sound', sound ? '1' : '0'); $('#fsound', root).textContent = sound ? '알림음 켬' : '알림음 끔'; if (sound) beep(1); return; }
       if (a === 'addCancel') { adding = null; draft = ''; renderLanes(true); return; }
       if (a === 'showHidden') { showHidden = !showHidden; renderLanes(true); return; }
       if (a === 'editSave') {
@@ -128,7 +128,7 @@ export default function facil(root, arg, d) {
       }
       if (ds.add) { adding = ds.add; draft = ''; renderLanes(true); return; }
       if (ds.star) { const n = gd.notes?.[ds.star]; setNote(ds.star, { star: !n?.star }); return; }
-      if (ds.hide) { const id = ds.hide; setNote(id, { hid: true }); toast('카드를 삭제했습니다', { action: '되돌리기', onAction: () => setNote(id, { hid: false }) }); return; }
+      if (ds.hide) { const id = ds.hide; setNote(id, { hid: true }); toast('카드를 삭제했어요', { action: '되돌리기', onAction: () => setNote(id, { hid: false }) }); return; }
       if (ds.restore) { setNote(ds.restore, { hid: false }); return; }
       if (ds.fedit) { const n = gd.notes?.[ds.fedit]; if (n?.a !== 'facil') return; editId = ds.fedit; $('#feditT', root).value = n.t; $('#fedit', root).showModal(); }
     });
@@ -143,7 +143,7 @@ export default function facil(root, arg, d) {
       e.preventDefault();
       if (e.target.id === 'fsent') {
         const v = $('#fsentIn', root).value.trim().replace(/^AI가 협력자가 되려면\s*/, '');
-        patch(`group/${G}`, { sentence: v }).then(() => toast(v ? '한 문장을 저장했습니다' : '한 문장을 비웠습니다')).catch(() => toast('연결을 확인해 주세요'));
+        patch(`group/${G}`, { sentence: v }).then(() => toast(v ? '한 문장을 저장했어요' : '한 문장을 비웠어요')).catch(() => toast('연결을 확인해 주세요'));
         $('#fsentIn', root).blur();
         return;
       }

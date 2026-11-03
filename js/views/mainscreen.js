@@ -43,7 +43,7 @@ export default function mainscreen(root, arg, d) {
           const sent = (groups[t.id]?.sentence || '').trim();
           return `<div class="ms-sent ${t.cls}"><div class="ms-sent-h"><span class="tp-n">${t.id}</span><b>${esc(t.title)}</b></div>
             <p class="ms-sent-t">${esc(SENTENCE_STEM)} <b>${sent ? esc(sent) : '<span class="muted">…</span>'}</b></p>
-            ${top.map(n => `<div class="ms-mini ${laneOf(n.l).cls}"><span>${laneOf(n.l).icon}</span>${esc(n.t)}<em>♥ ${n.likeN}</em></div>`).join('')}</div>`;
+            ${top.map(n => `<div class="ms-mini ${laneOf(n.l).cls}">${esc(n.t)}<em>♥ ${n.likeN}</em></div>`).join('')}</div>`;
         }).join('')}</div>`;
       return;
     }
@@ -56,7 +56,7 @@ export default function mainscreen(root, arg, d) {
       const sent = (groups[t.id]?.sentence || '').trim();
       return `<div class="ms-g ${t.cls}">
         <div class="ms-g-h"><span class="tp-n">${t.id}</span><b>${esc(t.title)}</b><small>${membersOf(groups[t.id]).length}명</small></div>
-        <div class="ms-counts">${LANES.map(l => `<span class="${l.cls}" title="${esc(l.name)}">${l.icon} ${list.filter(n => laneOf(n.l).key === l.key).length}</span>`).join('')}</div>
+        <div class="ms-counts">${LANES.map(l => `<span class="${l.cls}" title="${esc(l.name)}">${esc(l.short)} ${list.filter(n => laneOf(n.l).key === l.key).length}</span>`).join('')}</div>
         <div class="ms-g-list">${latest.map(n => `<div class="ms-mini ${laneOf(n.l).cls}">${n.star ? '★ ' : ''}${esc(n.t)}</div>`).join('') || '<p class="muted small">아직 카드가 없어요</p>'}</div>
         ${s.key === 'sentence' ? `<p class="ms-g-sent">${esc(SENTENCE_STEM)} <b>${esc(sent) || '…'}</b></p>` : ''}
       </div>`;

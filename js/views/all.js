@@ -22,7 +22,7 @@ export default function all(root, arg, d) {
 
   function render() {
     const cfg = cfgOf(ev);
-    const note = cfg.likeOnly ? '지금은 공감만 할 수 있습니다. 마음에 닿는 카드에 ♥를 눌러 주세요.' : cfg.notice.trim();
+    const note = cfg.likeOnly ? '지금은 ♥만 누를 수 있어요. 동의하는 카드에 ♥를 눌러 주세요.' : cfg.notice.trim();
     $('#anote', root).hidden = !note; $('#anote', root).textContent = note;
     $('#asents', root).innerHTML = TOPICS.map(t => {
       const s = (groups[t.id]?.sentence || '').trim();
@@ -31,7 +31,7 @@ export default function all(root, arg, d) {
     $('#afilter', root).innerHTML = [`<button class="chip ${!filter ? 'on' : ''}" data-f="0">전체</button>`,
       ...TOPICS.map(t => `<button class="chip ${t.cls} ${filter === t.id ? 'on' : ''}" data-f="${t.id}">${t.id}. ${esc(t.title)}</button>`)].join('');
     $('#alane', root).innerHTML = [`<button class="chip ${!lane ? 'on' : ''}" data-l="">모든 칸</button>`,
-      ...LANES.map(l => `<button class="chip ${l.cls} ${lane === l.key ? 'on' : ''}" data-l="${l.key}">${l.icon} ${esc(l.short)}</button>`)].join('');
+      ...LANES.map(l => `<button class="chip ${l.cls} ${lane === l.key ? 'on' : ''}" data-l="${l.key}">${esc(l.short)}</button>`)].join('');
     const list = GROUPS.filter(g => !filter || g === filter).flatMap(g => notesOf(groups[g], me, g)).filter(n => !n.hid && (!lane || laneOf(n.l).key === lane)).sort(byLikes);
     $('#acount', root).textContent = `카드 ${list.length}장 · 공감 많은 순`;
     $('#alist', root).innerHTML = list.map(n => card(n, { group: true })).join('') || '<p class="empty">아직 카드가 없어요</p>';

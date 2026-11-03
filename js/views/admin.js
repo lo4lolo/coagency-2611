@@ -19,13 +19,13 @@ export default function admin(root, arg, d) {
 
       <section class="card"><h2>진행 단계 <span class="adm-timer mono" id="atimer"></span></h2>
         <div class="step-btns" id="asteps"></div>
-        <div class="row"><button class="btn" data-a="toggle">⏯ 멈춤/계속</button><button class="btn" data-a="minus">−1분</button><button class="btn" data-a="plus">+1분</button>
+        <div class="row"><button class="btn" data-a="toggle">멈춤/계속</button><button class="btn" data-a="minus">−1분</button><button class="btn" data-a="plus">+1분</button>
           <span class="small muted">단계를 누르면 큰 화면·진행판·참여자 화면이 함께 바뀌고, 시간이 있는 단계는 타이머가 바로 시작됩니다.</span></div>
       </section>
 
       <section class="card"><h2>분임 현황</h2>
-        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>분임</th><th>주제</th><th>인원</th>${LANES.map(l => `<th title="${esc(l.name)}">${l.icon}</th>`).join('')}<th>★</th><th>한 문장</th><th></th></tr></thead><tbody id="agroups"></tbody></table></div>
-        <p class="small muted">합계 <b id="atotal">0</b>명. 자리를 비우면 그 분임의 자리 기록만 지워지고 카드는 남습니다(나간 분이 있을 때).</p>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>분임</th><th>주제</th><th>인원</th>${LANES.map(l => `<th title="${esc(l.name)}">${esc(l.short)}</th>`).join('')}<th>★</th><th>한 문장</th><th></th></tr></thead><tbody id="agroups"></tbody></table></div>
+        <p class="small muted">합계 <b id="atotal">0</b>명. 자리를 떠난 분이 있을 때 ‘자리 비우기’를 누르면 자리 기록만 지워지고 카드는 남습니다.</p>
       </section>
 
       <section class="card"><h2>설정</h2>
@@ -71,7 +71,7 @@ export default function admin(root, arg, d) {
         $('#ccap', root).value = cfg.cap; $('#copen', root).checked = cfg.open; $('#clike', root).checked = cfg.likeOnly; $('#cnotice', root).value = cfg.notice;
         $$('[data-dur]', root).forEach(x => { x.value = cfg.dur[x.dataset.dur]; });
       }
-      $('#cfghint', root).textContent = `지금 ${total}명 → 5개 분임이면 분임당 ${Math.ceil(total / 5) || 0}명. 정원은 이보다 1명쯤 여유 있게.`;
+      $('#cfghint', root).textContent = `지금 ${total}명이면 분임당 ${Math.ceil(total / 5) || 0}명입니다. 정원은 이보다 1명 넉넉하게 잡으세요.`;
       tick();
     }
     function tick() {

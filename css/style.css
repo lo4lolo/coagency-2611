@@ -172,6 +172,7 @@ body[data-view="f"] .demo-bar, body[data-view="main"] .demo-bar { position: fixe
 .own button { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: .15em .7em; min-height: 34px; font-size: .85em; }
 .cn-tools { display: inline-flex; gap: 4px; margin-left: auto; align-items: center; }
 .cn-tools button { border: 1px solid var(--line); background: #fff; border-radius: 8px; min-width: 32px; min-height: 30px; padding: 0 .3em; }
+.cn-tools [data-fedit], .cn-tools [data-hide] { font-size: .8em; }
 .cn-tools select { width: auto; padding: .15em .3em; font-size: .8em; border-radius: 8px; min-height: 30px; }
 
 /* 대화 상자 */
